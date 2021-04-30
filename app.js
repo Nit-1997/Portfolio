@@ -18,6 +18,10 @@ app.post("/sendMail",(req,res)=>{
 })
 
 
-app.listen(7000,function(){
-     console.log("server has started");
+// app.listen(7000,function(){
+//      console.log("server has started");
+// });
+
+app.listen(process.env.PORT,process.env.IP,function(){
+     console.log("app server has started on heroku ");
 });
