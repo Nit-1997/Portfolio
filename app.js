@@ -17,11 +17,7 @@ app.get("/",(req,res)=>{
 app.post("/sendMail",async(req,res)=>{
     try{
         
-
-        console.log(process.env.EMAIL)
-        console.log(process.env.PASS)
-
-    
+   
 		let transporter = nodemailer.createTransport({
 		    service: 'gmail',
 		    auth: {
