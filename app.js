@@ -56,11 +56,6 @@ app.post("/sendMail",async(req,res)=>{
 
 
 
-
-var PORT = process.env.PORT || 7000
-var IP = process.env.IP || "127.0.0.1"
-
-
-app.listen(PORT,IP,function(){
+app.listen(process.env.PORT,process.env.IP,function(){
      console.log("app server has started");
 });
