@@ -1,8 +1,9 @@
 var  express        = require("express")
    , app            = express()
    , bodyParser     = require("body-parser")
-   
-var nodemailer = require('nodemailer');
+   , nodemailer     = require("nodemailer")
+
+require('dotenv').config()
 
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(express.static(__dirname+"/public"));
@@ -12,46 +13,54 @@ app.get("/",(req,res)=>{
    res.render("home")
 })
 
+
 app.post("/sendMail",async(req,res)=>{
     try{
-        let testAccount = await nodemailer.createTestAccount();
+        
 
-        console.log(testAccount)
+        console.log(process.env.EMAIL)
+        console.log(process.env.PASS)
 
+    
 		let transporter = nodemailer.createTransport({
-			name: "https://nitinbhat.herokuapp.com/",
-		    host: testAccount.smtp.host,
-		    port: testAccount.smtp.port,
-		    secure: testAccount.smtp.secure, // true for 465, false for other ports
+		    service: 'gmail',
 		    auth: {
-		      user: testAccount.user, // generated ethereal user
-		      pass: testAccount.pass, // generated ethereal password
+		      user: process.env.EMAIL, // generated ethereal user
+		      pass: process.env.PASS // generated ethereal password
 		    },
 		  });
 
+	
 		  // send mail with defined transport object
 		  let info = await transporter.sendMail({
-		    from: testAccount.user, // sender address
+		    from: process.env.EMAIL, // sender address
 		    to: "ntnbhat9@gmail.com", // list of receivers
-		    subject:'['+req.email+'] '+req.body.subject, // Subject line
-		    text: "From "+req.name+",\n"+req.body, // plain text body
-		    html: "<h3>From "+req.name+",</h3>\n"+req.body, // html body
+		    subject:'['+req.body.email+'] '+req.body.subject, // Subject line
+		    text: "From "+req.body.name+",\n"+req.body.body, // plain text body
+		    html: "<h3>From "+req.body.name+",</h3>\n"+req.body.body, // html body
 		  });
 
-		 console.log(info)
+	    console.log(info)
+		console.log(req.body)
+
+
+
 
 	   res.json({success:true})
 	}catch(error){
 	   console.log(error)	
+	   res.json({success:false})
 	}
  
 })
 
 
-// app.listen(7000,function(){
-//      console.log("server has started");
-// });
 
-app.listen(process.env.PORT,process.env.IP,function(){
-     console.log("app server has started on heroku ");
+
+var PORT = process.env.PORT || 7000
+var IP = process.env.IP || "127.0.0.1"
+
+
+app.listen(PORT,IP,function(){
+     console.log("app server has started");
 });
